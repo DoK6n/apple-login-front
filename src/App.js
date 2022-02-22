@@ -19,7 +19,6 @@ function App() {
    * response_mode : 예상되는 응답 모드 유형. 값은 query, fragment 및 form_post이고, scope를 요청한 경우 값은 form_post 여야 한다.
    */
 
-  // const appleLoginUrl = `https://appleid.apple.com/auth/authorize?client_id=com.dok6n.appleauthnode-web&redirect_uri=https%3A%2F%2Fdok6nlogindemo.cf&response_type=code%20id_token&state=signin&scope=email%20name&nonce=nonce&response_mode=web_message&frame_id=41bb737b-2d0f-4a8d-a408-cc89c0fa470c&m=11&v=1.5.4`;
   const appleLoginUrl = `https://appleid.apple.com/auth/authorize?client_id=com.dok6n.appleauthnode-web&redirect_uri=https://dok6nlogindemo.cf&response_type=code id_token&state=signin&scope=email name&nonce=nonce&response_mode=web_message&m=11&v=1.5.4`;
 
   const clientId = process.env.REACT_APP_APPLE_CLIENT_ID;
@@ -45,7 +44,26 @@ function App() {
           /** Allows to change the button's children, eg: for changing the button text */
           buttonExtraChildren='continue with Apple'
           //onSuccess response object will contain the user object on the first time attempt only
-          onSuccess={response => console.dir(response)}
+          onSuccess={({ authorization }) => {
+            const { code, id_token, state } = authorization;
+            fetch('http://localhost:3333/auth', {
+              method: 'post',
+              body: JSON.stringify({
+                code,
+                id_token,
+                state
+              })
+            })
+              .then(res => res.json())
+              .then(res => {
+                if (res.success) {
+                  alert('저장 완료');
+                }
+              });
+            console.log(`code: ${code}`);
+            console.log(`id_token: ${id_token}`);
+            console.log(`state: ${state}`);
+          }}
           onError={error => console.log(error)}
           /** Spread rest props if needed */
           // {...rest}
