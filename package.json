@@ -10,8 +10,10 @@
     "jsonwebtoken": "^8.5.1",
     "querystring": "^0.2.1",
     "react": "^17.0.2",
+    "react-apple-signin-auth": "^1.0.6",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
+    "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -20,7 +22,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "deploy": "aws s3 sync ./build s3://apple-login-front --profile=apple-login-deploy",
-    "invalidate": "aws cloudfront create-invalidation --profile=apple-login-deploy --distribution-id E2MUWYANL3KYIP --paths / /index.html /index.html /service-worker.js /manifest.json /favicon.ico"
+    "invalidate": "aws cloudfront create-invalidation --profile=apple-login-deploy --distribution-id E2MUWYANL3KYIP --paths / /index.html /index.html /service-worker.js /manifest.json /favicon.ico",
+    "build-deploy": "npm run build && npm run deploy && npm run invalidate"
   },
   "eslintConfig": {
     "extends": [
